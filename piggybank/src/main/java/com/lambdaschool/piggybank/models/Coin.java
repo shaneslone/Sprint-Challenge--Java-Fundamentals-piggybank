@@ -19,7 +19,6 @@ public class Coin {
     }
 
     public Coin(String name, String nameplural, double value, int numberofcoins) {
-        this.coinid = coinid;
         this.name = name;
         this.nameplural = nameplural;
         this.value = value;

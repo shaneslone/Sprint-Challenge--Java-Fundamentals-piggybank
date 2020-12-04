@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -30,12 +31,51 @@ public class CoinController {
             {
                 System.out.println(c.getQuantity() + " " + c.getNameplural());
                 total = total + c.getQuantity() * c.getValue();
-            } else {
+            } else if (c.getQuantity() == 1){
                 System.out.println(c.getQuantity() + " " + c.getName());
                 total = total + c.getValue();
             }
         }
         System.out.println("The piggy bank holds " + total);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+    // http://localhost:2019/money/{ammount}
+    @GetMapping(value = "/money/{ammount}", produces = "application/json")
+    public ResponseEntity<?> removeMoney(@PathVariable double ammount)
+    {
+        List<Coin> myCoins = new ArrayList<>();
+        coinreops.findAll().iterator().forEachRemaining(myCoins::add);
+        double reduceMoney = ammount;
+        for (Coin c : myCoins)
+        {
+
+            while(Math.round((reduceMoney - c.getValue()) * 100.0) / 100.0 >= 0 && c.getQuantity() > 0)
+            {
+                reduceMoney = Math.round((reduceMoney - c.getValue()) * 100.0) / 100.0;
+                c.setQuantity(c.getQuantity() - 1);
+            }
+        }
+
+        double total = 0.0;
+        for (Coin c : myCoins)
+        {
+            if(c.getQuantity() > 1)
+            {
+                System.out.println(c.getQuantity() + " " + c.getNameplural());
+                total = total + c.getQuantity() * c.getValue();
+            } else if (c.getQuantity() == 1 ){
+                System.out.println(c.getQuantity() + " " + c.getName());
+                total = total + c.getValue();
+            }
+        }
+        if(total > 0.0)
+        {
+            System.out.println("Money not available");
+        } else {
+            System.out.println("The piggy bank holds " + total);
+        }
+
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }
