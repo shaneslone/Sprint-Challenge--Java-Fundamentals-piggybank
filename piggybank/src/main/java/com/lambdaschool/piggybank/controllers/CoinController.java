@@ -62,12 +62,11 @@ public class CoinController {
                 c.setQuantity(c.getQuantity() - 1);
             }
         }
-
-        double total = printMoney(myCoins);
         if(reduceMoney > 0.0)
         {
             System.out.println("Money not available");
         } else {
+            double total = printMoney(myCoins);
             System.out.println("The piggy bank holds " + total);
         }
 
