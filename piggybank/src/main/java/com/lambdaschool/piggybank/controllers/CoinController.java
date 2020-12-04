@@ -28,7 +28,7 @@ public class CoinController {
                 System.out.println(c.getQuantity() + " " + c.getNameplural());
                 total = total + c.getQuantity() * c.getValue();
             } else if (c.getQuantity() == 1){
-                System.out.println(c.getQuantity() + " " + c.getName());
+                System.out.println("1 " + c.getName());
                 total = total + c.getValue();
             }
         }
