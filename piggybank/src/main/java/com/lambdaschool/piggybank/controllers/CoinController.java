@@ -18,12 +18,8 @@ public class CoinController {
     @Autowired
     CoinRepository coinreops;
 
-//     http://localhost:2019/total
-    @GetMapping(value = "/total", produces = "application/json")
-    public ResponseEntity<?> piggybankTotal()
+    private double printMoney(List<Coin> myCoins)
     {
-        List<Coin> myCoins = new ArrayList<>();
-        coinreops.findAll().iterator().forEachRemaining(myCoins::add);
         double total = 0.0;
         for (Coin c : myCoins)
         {
@@ -36,6 +32,16 @@ public class CoinController {
                 total = total + c.getValue();
             }
         }
+        return total;
+    }
+
+//     http://localhost:2019/total
+    @GetMapping(value = "/total", produces = "application/json")
+    public ResponseEntity<?> piggybankTotal()
+    {
+        List<Coin> myCoins = new ArrayList<>();
+        coinreops.findAll().iterator().forEachRemaining(myCoins::add);
+        double total = printMoney(myCoins);
         System.out.println("The piggy bank holds " + total);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
@@ -57,18 +63,7 @@ public class CoinController {
             }
         }
 
-        double total = 0.0;
-        for (Coin c : myCoins)
-        {
-            if(c.getQuantity() > 1)
-            {
-                System.out.println(c.getQuantity() + " " + c.getNameplural());
-                total = total + c.getQuantity() * c.getValue();
-            } else if (c.getQuantity() == 1 ){
-                System.out.println(c.getQuantity() + " " + c.getName());
-                total = total + c.getValue();
-            }
-        }
+        double total = printMoney(myCoins);
         if(reduceMoney > 0.0)
         {
             System.out.println("Money not available");
