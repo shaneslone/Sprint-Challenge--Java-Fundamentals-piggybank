@@ -69,7 +69,7 @@ public class CoinController {
                 total = total + c.getValue();
             }
         }
-        if(total > 0.0)
+        if(reduceMoney > 0.0)
         {
             System.out.println("Money not available");
         } else {
